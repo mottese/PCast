@@ -32,6 +32,6 @@ The set of features included right now are:
   - Light-Emitting
 
 
-Here is a 1000x1000 pixel sample image showcasing Point and Ambient lighting illuminating a scene composed of a Matte sphere casting a shadow on a Phong sphere on top of a Phong plane. 9x anti-aliasing was used.
+Here is a 1000px x 1000px sample image showcasing Point and Ambient lighting illuminating a scene composed of a Matte sphere casting a shadow on a Phong sphere on top of a Phong plane. 9x anti-aliasing was used.
 
 ![sample](https://raw.github.com/mottese/PCast/master/images/shadows_big_aa9x.bmp)
