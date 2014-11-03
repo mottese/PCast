@@ -32,6 +32,6 @@ The set of features included right now are:
   - Light-Emitting
 
 
-Here is a 1000px x 1000px sample image showcasing Point and Ambient lights illuminating a scene composed of a Matte sphere casting a shadow on a Phong sphere on top of a Phong plane. 9x anti-aliasing was used. You can notice some distotion on the green sphere making it look slightly egg shaped. This is due to a slight fisheye effect because the camera is not parallel projection.
+Here is a 1000px x 1000px sample image showcasing Point and Ambient lights illuminating a scene composed of a Matte sphere casting a shadow on a Phong sphere on top of a Phong plane. 9x anti-aliasing was used. You can notice some distotion on the green sphere making it look slightly egg shaped. This is due to a slight fisheye effect because we are not using a parallel projection camera.
 
 ![sample](https://raw.github.com/mottese/PCast/master/images/shadows_big_aa9x.bmp)
