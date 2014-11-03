@@ -7,6 +7,10 @@ use warnings;
 package GeometricObject::Box;
 
 use POSIX;
+
+use FindBin qw($Bin);
+use lib "$Bin/../utilities";
+
 use Triple;
 
 

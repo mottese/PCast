@@ -2,7 +2,8 @@
 
 use strict;
 use warnings;
-use POSIX; #has the cosine function
+
+use POSIX;
 
 our $pi = 3.14159;
 

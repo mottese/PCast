@@ -6,6 +6,9 @@ use warnings;
 package Light::Directional;
 use parent 'Light';
 
+use FindBin qw($Bin);
+use lib "$Bin/../utilities";
+
 use Triple;
 
 sub new {

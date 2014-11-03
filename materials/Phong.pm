@@ -6,6 +6,10 @@ use warnings;
 package Material::Phong;
 use parent 'Material';
 
+use FindBin qw($Bin);
+use lib "$Bin/../utilities";
+use lib "$Bin/../lights";
+
 use Ambient;
 use Ray;
 

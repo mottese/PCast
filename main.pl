@@ -3,6 +3,16 @@
 use strict;
 use warnings;
 
+use FindBin qw($Bin);
+use lib "$Bin/brdfs";
+use lib "$Bin/cameras";
+use lib "$Bin/lights";
+use lib "$Bin/materials";
+use lib "$Bin/objects";
+use lib "$Bin/samplers";
+use lib "$Bin/utilities";
+use lib "$Bin/utilities/tracers";
+
 use World;
 use BMP;
 use Triple;
@@ -63,8 +73,8 @@ sub main {
 
   my $directionallight1 = new Light::Directional(1, new Triple(255, 255, 255), new Triple(1, 1, 0));
 
-  #$world->add_light($pointlight1);
-  $world->add_light($directionallight1);
+  $world->add_light($pointlight1);
+  #$world->add_light($directionallight1);
 
   my $a = 0.75; #scaling factor for yellow, orange, and light green
   my $yellow = new Triple($a * 1, $a * 1, 0);  #yellow
