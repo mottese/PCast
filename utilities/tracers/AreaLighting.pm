@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-package Tracer::BasicTracer;
+package Tracer::AreaLighting;
 use parent 'Tracer';
 
 sub new {
@@ -17,15 +17,14 @@ sub new {
 
 sub trace_ray {
   my ($this, $ray, $depth) = @_;
-  my $world = $this->{_world};
-  my $shade_rec = $world->hit_objects($ray);
+  my $shade_rec = $this->{_world}->hit_objects($ray);
 
   if ($shade_rec->hit()) {
     $shade_rec->ray($ray);
-    return $shade_rec->material()->shade($shade_rec);
+    return $shade_rec->material()->area_light_shade($shade_rec);
   }
   else {
-    return $world->background_color();
+    return $this->{_world}->background_color();
   }
 }
 
