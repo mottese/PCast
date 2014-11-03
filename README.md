@@ -1,7 +1,7 @@
 PCast
 ==============
 
-PCast is a ray caster written completely in Perl, no external libraries required. It is currently unoptimized, so it runs rather slowly. I have plans to optimize in the future. PCast produces .bmp files as output.
+PCast is an object-oriented ray caster written completely in Perl, no external libraries required. It is currently unoptimized, so it runs rather slowly. I have plans to optimize in the future. PCast produces .bmp files as output.
 
 The set of features included right now are:
 
