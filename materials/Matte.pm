@@ -7,7 +7,7 @@ package Material::Matte;
 use parent 'Material';
 
 use FindBin qw($Bin);
-use lib "$Bin/../brdfs";
+use lib "$Bin/brdfs";
 
 use Lambertian;
 
