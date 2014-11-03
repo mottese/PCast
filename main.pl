@@ -4,10 +4,10 @@ use strict;
 use warnings;
 
 use FindBin qw($Bin);
-use lib "$Bin/brdfs";
 use lib "$Bin/cameras";
 use lib "$Bin/lights";
 use lib "$Bin/materials";
+use lib "$Bin/materials/brdfs";
 use lib "$Bin/objects";
 use lib "$Bin/samplers";
 use lib "$Bin/utilities";
