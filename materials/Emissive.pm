@@ -9,8 +9,8 @@ use parent 'Material';
 sub new {
   my $class = shift;
   my $this = bless {
-    _ce => ,
-    _ls => ,
+    _ls => shift, #radiance scaling factor
+    _ce => shift, #color
   }, $class;
   return $this;
 }

@@ -11,12 +11,11 @@ use parent 'GeometricObject';
 
 sub new {
   my $class = shift;
-  my ($center, $radius, $material) = @_;
 
   my $this = bless {
-    _center => $center,
-    _radius => $radius,  
-    _material => $material,
+    _center => shift,
+    _radius => shift,  
+    _material => shift,
   }, $class;
 
   return $this;

@@ -20,6 +20,7 @@ use Sphere;
 use Ray;
 use ShadeRec;
 use BasicTracer;
+use AreaLighting;
 use PinholeCamera;
 use Box;
 use Matte;
@@ -27,10 +28,13 @@ use Lambertian;
 use Ambient;
 use Point;
 use Plane;
+use Rectangle;
 use Directional;
 use GlossySpecular;
 use Phong;
 use Jittered;
+use Emissive;
+use Area;
 
 our $kEpsilon = 0.00001; # 1.0E-5
 our $kHugeValue = 10000000000; # 1.0E10
@@ -42,11 +46,112 @@ my $console = select(STDOUT);
 $| = 1;
 select($console); 
 
-main();
+arealight();
 
 
 
-sub main {
+sub arealight {
+  my $hres = 600;
+  my $vres = 600;
+  my $pixel_size = 1;
+  my $num_samples = 1;
+  my $sampler1 = new Sampler::Jittered($num_samples);
+  my $sampler2 = new Sampler::Jittered(100);
+  my $eye = new Triple(-20, 10, 20);
+  my $look_at = new Triple(0, 2, 0);
+  my $distance_to_viewplane = 1080;
+  my $up = new Triple(0, 1, 0);
+  my $roll_angle = $pi * 0; #in radians
+  my $zoom = 1;
+  my $exposure_time = 1;
+  my $file_name = "arealight";
+
+
+  my $camera = new Camera::PinholeCamera($hres, $vres, $pixel_size, $sampler1, $eye, $distance_to_viewplane, $up, $look_at, $roll_angle, $zoom, $exposure_time);
+  my $background = new Triple(0, 0, 0);
+  my $ambient = new Light::Ambient(0.0, new Triple(255, 255, 255));
+  my $world = new World($background, $ambient);
+  my $tracer = new Tracer::AreaLighting($world);
+  $world->tracer($tracer);
+
+  my $radiance = 40.0;
+  my $color = new Triple(1, 1, 1); #white
+  my $emissive = new Material::Emissive($radiance, $color);
+  my $width1 = 4.0;
+  my $height1 = 4.0;
+  my $center1 = new Triple(0, 7, -7);
+  my $p01 = new Triple(-0.5 * $width1, $center1->snd() - (0.5 * $height1), $center1->trd());
+  my $a1 = new Triple($width1, 0, 0);
+  my $b1 = new Triple(0, $height1, 0);
+  my $normal1 = new Triple(0, 0, 1);
+  my $rect_light = new GeometricObject::Rectangle($p01, $a1, $b1);
+  $rect_light->material($emissive);
+  $rect_light->sampler($sampler2);
+  
+  $world->add_object($rect_light);
+  
+  my $area_light_ptr = new Light::Area($rect_light);
+	$world->add_light($area_light_ptr);
+  
+	# Four axis aligned boxes
+		
+	my $box_width  = 1.0; 		# x dimension
+	my $box_depth  = 1.0; 		# z dimension
+	my $box_height = 4.5; 		# y dimension
+	my $gap			   = 3.0; 
+	
+	my $matte_ptr1 = new Material::Matte();			
+	$matte_ptr1->set_ka(0.25); 
+	$matte_ptr1->set_kd(0.75);
+	$matte_ptr1->set_cd(0.4, 0.7, 0.4);     # green
+	
+	my $box_ptr0 = new GeometricObject::Box(new Triple(- 1.5 * $gap - 2.0 * $box_width, 0.0, -0.5 * $box_depth), 
+							                            new Triple(-1.5 * $gap - $box_width, $box_height, 0.5 * $box_depth)); 
+	$box_ptr0->material($matte_ptr1);
+	$world->add_object($box_ptr0);
+	
+	my $box_ptr1 = new GeometricObject::Box(new Triple(- 0.5 * $gap - $box_width, 0.0, -0.5 * $box_depth), 
+							                            new Triple(-0.5 * $gap, $box_height, 0.5 * $box_depth)); 
+	$box_ptr1->material($matte_ptr1);
+	$world->add_object($box_ptr1);
+		
+	my $box_ptr2 = new GeometricObject::Box(new Triple(0.5 * $gap, 0.0, -0.5 * $box_depth), 
+							                            new Triple(0.5 * $gap + $box_width, $box_height, 0.5 * $box_depth));
+  $box_ptr2->material($matte_ptr1);
+	$world->add_object($box_ptr2);
+	
+	my $box_ptr3 = new GeometricObject::Box(new Triple(1.5 * $gap + $box_width, 0.0, -0.5 * $box_depth), 
+							                            new Triple(1.5 * $gap + 2.0 * $box_width, $box_height, 0.5 * $box_depth));
+	$box_ptr3->material($matte_ptr1);
+	$world->add_object($box_ptr3);
+
+		
+	# ground plane
+	
+	my $matte_ptr2 = new Material::Matte();			
+	$matte_ptr2->set_ka(0.1); 
+	$matte_ptr2->set_kd(0.90);
+	$matte_ptr2->set_cd(new Triple(1, 1, 1)); #white
+		
+	my $plane_ptr = new GeometricObject::Plane(new Triple(0, 0, 0), new Triple(0, 1, 0)); 
+	$plane_ptr->material($matte_ptr2);
+	$world->add_object($plane_ptr);	  
+  
+  
+
+  my $start_time = time();  
+  print "start: ";
+  my $image = $camera->render_scene($world);
+  print ":done\n";
+  print ((time() - $start_time) . " seconds");
+  
+  open (my $fh, ">" . $file_name . ".bmp");
+  $image->print($fh);
+  close $fh;
+}
+
+
+sub spheres {
   my $hres = 400;
   my $vres = 400;
   my $pixel_size = 1;
@@ -114,14 +219,17 @@ sub main {
   
   my $center1 = new Triple(0, 50, 0);
   my $radius1 = 50;
-  my $sphere1 = new GeometricObject::Sphere($center1, $radius1, $phong1);
+  my $sphere1 = new GeometricObject::Sphere($center1, $radius1);
+  $sphere1->material($phong1);
   
   my $center2 = new Triple(-50, 50, -50);
   my $radius2 = 23;
-  my $sphere2 = new GeometricObject::Sphere($center2, $radius2, $matte1);
+  my $sphere2 = new GeometricObject::Sphere($center2, $radius2);
+  $sphere1->material($matte1);
   
   my $normal1 = new Triple(0, 1, 0);
-  my $plane1 = new GeometricObject::Plane($center1, $normal1, $phong2);  
+  my $plane1 = new GeometricObject::Plane($center1, $normal1);  
+  $plane1->material($phong2);
   
   $world->add_object($plane1);
   $world->add_object($sphere1);
