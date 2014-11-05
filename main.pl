@@ -41,20 +41,20 @@ our $kHugeValue = 10000000000; # 1.0E10
 our $pi = 3.14159;
 our $invPi = 1 / $pi;
 
-# print buffers to insure messages go to screen quickly 
-my $console = select(STDOUT); 
+# print buffers to insure messages go to screen quickly
+my $console = select(STDOUT);
 $| = 1;
-select($console); 
+select($console);
 
 arealight();
 
 
 
 sub arealight {
-  my $hres = 600;
-  my $vres = 600;
+  my $hres = 500;
+  my $vres = 500;
   my $pixel_size = 1;
-  my $num_samples = 9;
+  my $num_samples = 1;
   my $sampler1 = new Sampler::Jittered($num_samples);
   my $sampler2 = new Sampler::Jittered(100);
   my $eye = new Triple(-20, 10, 20);
@@ -71,7 +71,7 @@ sub arealight {
   my $background = new Triple(0, 0, 0);
   my $ambient = new Light::Ambient(0.0, new Triple(255, 255, 255));
   my $world = new World($background, $ambient);
-  my $tracer = new Tracer::AreaLighting($world);
+  my $tracer = new Tracer::BasicTracer($world);
   $world->tracer($tracer);
 
   my $radiance = 40.0;
@@ -87,45 +87,47 @@ sub arealight {
   my $rect_light = new GeometricObject::Rectangle($p01, $a1, $b1);
   $rect_light->material($emissive);
   $rect_light->sampler($sampler2);
-  
+
   $world->add_object($rect_light);
-  
+
   my $area_light_ptr = new Light::Area($rect_light);
-	$world->add_light($area_light_ptr);
-  
-	# Four axis aligned boxes
-		
-	my $center2  = new Triple(0, 2, 0); 	
-	my $radius2  = 50; 		
-	
-	my $matte1 = new Material::Matte();			
-	$matte1->set_ka(0.25); 
+  #$world->add_light($area_light_ptr);
+
+  my $pointlight = new Light::Point(3.0, new Triple(255, 255, 255), new Triple(0, 7, -7));
+     $world->add_light($pointlight);
+
+
+	my $center2  = new Triple(0, 2, 0);
+	my $radius2  = 25;
+
+	my $matte1 = new Material::Matte();
+	$matte1->set_ka(0.25);
 	$matte1->set_kd(0.75);
 	$matte1->set_cd(0.4, 0.7, 0.4);     # green
-	
+
 	my $sphere1 = new GeometricObject::Sphere($center2, $radius2);
   $sphere1->material($matte1);
+  $world->add_object($sphere1);
 
-		
 	# ground plane
-	
-	my $matte_ptr2 = new Material::Matte();			
-	$matte_ptr2->set_ka(0.1); 
+
+	my $matte_ptr2 = new Material::Matte();
+	$matte_ptr2->set_ka(0.1);
 	$matte_ptr2->set_kd(0.90);
 	$matte_ptr2->set_cd(new Triple(1, 1, 1)); #white
-		
-	my $plane_ptr = new GeometricObject::Plane(new Triple(0, 0, 0), new Triple(0, 1, 0)); 
-	$plane_ptr->material($matte_ptr2);
-	$world->add_object($plane_ptr);	  
-  
-  
 
-  my $start_time = time();  
+	my $plane_ptr = new GeometricObject::Plane(new Triple(0, 0, 0), new Triple(0, 1, 0));
+	$plane_ptr->material($matte_ptr2);
+	$world->add_object($plane_ptr);
+
+
+
+  my $start_time = time();
   print "start: ";
   my $image = $camera->render_scene($world);
   print ":done\n";
-  print ((time() - $start_time) . " seconds");
-  
+  print ((time() - $start_time) . " seconds\n");
+
   open (my $fh, ">" . $file_name . ".bmp");
   $image->print($fh);
   close $fh;
@@ -172,56 +174,56 @@ sub spheres {
   my $dark_yellow = new Triple(0.61, 0.61, 0);  #dark yellow
   my $light_purple = new Triple(0.65, 0.3, 1);  #light purple
   my $dark_purple = new Triple(0.5, 0, 1);  #dark purple
-  
+
   #phong materials' reflection coefficients
   my $ka = 0.25;
   my $kd = 0.75;
   my $ks = 0.1;
   my $exp = 50;
-  
+
   my $phong1 = new Material::Phong();
   $phong1->set_ka($ka);
   $phong1->set_kd($kd);
   $phong1->set_ks($ks);
   $phong1->set_exp($exp);
   $phong1->set_cd($yellow);
-  
+
   my $phong2 = new Material::Phong();
   $phong2->set_ka($ka);
   $phong2->set_kd($kd);
   $phong2->set_ks($ks);
   $phong2->set_exp($exp);
   $phong2->set_cd($orange);
-  
+
   my $matte1 = new Material::Matte();
   $matte1->set_ka($ka);
   $matte1->set_kd($kd);
   $matte1->set_cd($green);
-  
+
   my $center1 = new Triple(0, 50, 0);
   my $radius1 = 50;
   my $sphere1 = new GeometricObject::Sphere($center1, $radius1);
   $sphere1->material($phong1);
-  
+
   my $center2 = new Triple(-50, 50, -50);
   my $radius2 = 23;
   my $sphere2 = new GeometricObject::Sphere($center2, $radius2);
   $sphere1->material($matte1);
-  
+
   my $normal1 = new Triple(0, 1, 0);
-  my $plane1 = new GeometricObject::Plane($center1, $normal1);  
+  my $plane1 = new GeometricObject::Plane($center1, $normal1);
   $plane1->material($phong2);
-  
+
   $world->add_object($plane1);
   $world->add_object($sphere1);
   $world->add_object($sphere2);
 
-  my $start_time = time();  
+  my $start_time = time();
   print "start: ";
   my $image = $camera->render_scene($world);
   print ":done\n";
   print ((time() - $start_time) . " seconds");
-  
+
   open (my $fh, ">" . $file_name . ".bmp");
   $image->print($fh);
   close $fh;
