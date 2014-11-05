@@ -54,17 +54,17 @@ sub arealight {
   my $hres = 600;
   my $vres = 600;
   my $pixel_size = 1;
-  my $num_samples = 1;
+  my $num_samples = 9;
   my $sampler1 = new Sampler::Jittered($num_samples);
   my $sampler2 = new Sampler::Jittered(100);
   my $eye = new Triple(-20, 10, 20);
   my $look_at = new Triple(0, 2, 0);
   my $distance_to_viewplane = 1080;
   my $up = new Triple(0, 1, 0);
-  my $roll_angle = $pi * 0; #in radians
+  my $roll_angle = $pi * 0.5; #in radians
   my $zoom = 1;
   my $exposure_time = 1;
-  my $file_name = "arealight";
+  my $file_name = "arealight_9";
 
 
   my $camera = new Camera::PinholeCamera($hres, $vres, $pixel_size, $sampler1, $eye, $distance_to_viewplane, $up, $look_at, $roll_angle, $zoom, $exposure_time);
@@ -95,35 +95,16 @@ sub arealight {
   
 	# Four axis aligned boxes
 		
-	my $box_width  = 1.0; 		# x dimension
-	my $box_depth  = 1.0; 		# z dimension
-	my $box_height = 4.5; 		# y dimension
-	my $gap			   = 3.0; 
+	my $center2  = new Triple(0, 2, 0); 	
+	my $radius2  = 50; 		
 	
-	my $matte_ptr1 = new Material::Matte();			
-	$matte_ptr1->set_ka(0.25); 
-	$matte_ptr1->set_kd(0.75);
-	$matte_ptr1->set_cd(0.4, 0.7, 0.4);     # green
+	my $matte1 = new Material::Matte();			
+	$matte1->set_ka(0.25); 
+	$matte1->set_kd(0.75);
+	$matte1->set_cd(0.4, 0.7, 0.4);     # green
 	
-	my $box_ptr0 = new GeometricObject::Box(new Triple(- 1.5 * $gap - 2.0 * $box_width, 0.0, -0.5 * $box_depth), 
-							                            new Triple(-1.5 * $gap - $box_width, $box_height, 0.5 * $box_depth)); 
-	$box_ptr0->material($matte_ptr1);
-	$world->add_object($box_ptr0);
-	
-	my $box_ptr1 = new GeometricObject::Box(new Triple(- 0.5 * $gap - $box_width, 0.0, -0.5 * $box_depth), 
-							                            new Triple(-0.5 * $gap, $box_height, 0.5 * $box_depth)); 
-	$box_ptr1->material($matte_ptr1);
-	$world->add_object($box_ptr1);
-		
-	my $box_ptr2 = new GeometricObject::Box(new Triple(0.5 * $gap, 0.0, -0.5 * $box_depth), 
-							                            new Triple(0.5 * $gap + $box_width, $box_height, 0.5 * $box_depth));
-  $box_ptr2->material($matte_ptr1);
-	$world->add_object($box_ptr2);
-	
-	my $box_ptr3 = new GeometricObject::Box(new Triple(1.5 * $gap + $box_width, 0.0, -0.5 * $box_depth), 
-							                            new Triple(1.5 * $gap + 2.0 * $box_width, $box_height, 0.5 * $box_depth));
-	$box_ptr3->material($matte_ptr1);
-	$world->add_object($box_ptr3);
+	my $sphere1 = new GeometricObject::Sphere($center2, $radius2);
+  $sphere1->material($matte1);
 
 		
 	# ground plane
