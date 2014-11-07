@@ -11,8 +11,9 @@ use lib "$Bin/materials/brdfs";
 use lib "$Bin/objects";
 use lib "$Bin/samplers";
 use lib "$Bin/utilities";
-use lib "$Bin/utilities/tracers";
+use lib "$Bin/tracers";
 
+use Constants;
 use World;
 use BMP;
 use Triple;
@@ -36,19 +37,16 @@ use Jittered;
 use Emissive;
 use Area;
 
-our $kEpsilon = 0.00001; # 1.0E-5
-our $kHugeValue = 10000000000; # 1.0E10
-our $pi = 3.14159;
-our $invPi = 1 / $pi;
-
 # print buffers to insure messages go to screen quickly
 my $console = select(STDOUT);
 $| = 1;
 select($console);
 
-arealight();
+main();
 
+sub main {
 
+}
 
 sub arealight {
   my $hres = 500;
