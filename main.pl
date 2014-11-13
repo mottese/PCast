@@ -42,7 +42,7 @@ my $console = select(STDOUT);
 $| = 1;
 select($console);
 
-arealight();
+spheres();
 
 sub main {
   my $hres = 400;
@@ -54,7 +54,7 @@ sub main {
   my $look_at = new Triple(0, 0, 0);
   my $distance_to_viewplane = 50;
   my $up = new Triple(0, 1, 0);
-  my $roll_angle = $pi * .5; #in radians
+  my $roll_angle = $main::pi * .5; #in radians
   my $zoom = 2;
   my $exposure_time = 1;
   my $file_name = "test";
