@@ -303,7 +303,7 @@ sub spheres {
   my $center2 = new Triple(-50, 50, -50);
   my $radius2 = 23;
   my $sphere2 = new GeometricObject::Sphere($center2, $radius2);
-  $sphere1->material($matte1);
+  $sphere2->material($matte1);
 
   my $normal1 = new Triple(0, 1, 0);
   my $plane1 = new GeometricObject::Plane($center1, $normal1);

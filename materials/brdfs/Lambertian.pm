@@ -34,7 +34,7 @@ sub cd {
 
 sub f {
   my $this = shift;
-  return ($this->{_kd} * $this->{_cd}) * $main::invPi;
+  return ($this->{_kd} * $this->{_cd}) * $main::inv_pi;
 }
 
 sub rho {
