@@ -23,7 +23,7 @@ sub new {
     _u => \@u, #u texture coordinate at each vertex
     _v => \@v, #v texture coordinate at each vertex
     _num_vertices => 0, #number of vertices
-    _num_triangles 0, #nubmer of triangles
+    _num_triangles => 0, #nubmer of triangles
   }, $class;
   
   return $this;

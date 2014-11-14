@@ -11,12 +11,12 @@ sub new {
   my $class = shift;
 
   my $this = bless { 
-    _index0 => ,
-    _index1 => ,
-    _index2 => ,
-    _normal => ,
+    _index0 => shift,
+    _index1 => shift,
+    _index2 => shift,
+    _normal => shift,
     _mesh => shift,
-    _material => shift,
+    _material => undef,
   }, $class;
 
   return $this;
@@ -42,15 +42,15 @@ sub hit { # Note: $tmin must be a reference to a scalar
   my $c = $ray->direction()->fst();
   my $d = $v0->fst() - $ray->origin()->fst();
   
-  my $a = $v0->snd() - $v1->snd();
-  my $b = $v0->snd() - $v2->snd();
-  my $c = $ray->direction()->snd();
-  my $d = $v0->snd() - $ray->origin()->snd();
+  my $e = $v0->snd() - $v1->snd();
+  my $f = $v0->snd() - $v2->snd();
+  my $g = $ray->direction()->snd();
+  my $h = $v0->snd() - $ray->origin()->snd();
   
-  my $a = $v0->trd() - $v1->trd();
-  my $b = $v0->trd() - $v2->trd();
-  my $c = $ray->direction()->trd();
-  my $d = $v0->trd() - $ray->origin()->trd();
+  my $i = $v0->trd() - $v1->trd();
+  my $j = $v0->trd() - $v2->trd();
+  my $k = $ray->direction()->trd();
+  my $l = $v0->trd() - $ray->origin()->trd();
   
   my $m = $f * $k - $g * $j;
   my $n = $h * $k - $g * $l;
@@ -80,7 +80,7 @@ sub hit { # Note: $tmin must be a reference to a scalar
     return 0;
   }
    
-  my $e2 = $a * $p - $b * $r + $d * $s;
+  my $e3 = $a * $p - $b * $r + $d * $s;
   my $t = $e3 * $inv_denom;
   
   if ($t < $main::kEpsilon) {
@@ -106,15 +106,15 @@ sub shadow_hit { # Note: $tmin must be a reference to a scalar
   my $c = $ray->direction()->fst();
   my $d = $v0->fst() - $ray->origin()->fst();
   
-  my $a = $v0->snd() - $v1->snd();
-  my $b = $v0->snd() - $v2->snd();
-  my $c = $ray->direction()->snd();
-  my $d = $v0->snd() - $ray->origin()->snd();
+  my $e = $v0->snd() - $v1->snd();
+  my $f = $v0->snd() - $v2->snd();
+  my $g = $ray->direction()->snd();
+  my $h = $v0->snd() - $ray->origin()->snd();
   
-  my $a = $v0->trd() - $v1->trd();
-  my $b = $v0->trd() - $v2->trd();
-  my $c = $ray->direction()->trd();
-  my $d = $v0->trd() - $ray->origin()->trd();
+  my $i = $v0->trd() - $v1->trd();
+  my $j = $v0->trd() - $v2->trd();
+  my $k = $ray->direction()->trd();
+  my $l = $v0->trd() - $ray->origin()->trd();
   
   my $m = $f * $k - $g * $j;
   my $n = $h * $k - $g * $l;
@@ -144,7 +144,7 @@ sub shadow_hit { # Note: $tmin must be a reference to a scalar
     return 0;
   }
    
-  my $e2 = $a * $p - $b * $r + $d * $s;
+  my $e3 = $a * $p - $b * $r + $d * $s;
   my $t = $e3 * $inv_denom;
   
   if ($t < $main::kEpsilon) {

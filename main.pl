@@ -36,6 +36,8 @@ use Phong;
 use Jittered;
 use Emissive;
 use Area;
+use Mesh;
+use FlatMeshTriangle;
 
 # print buffers to insure messages go to screen quickly
 my $console = select(STDOUT);
@@ -96,14 +98,7 @@ sub main {
   $phong1->set_kd($kd);
   $phong1->set_ks($ks);
   $phong1->set_exp($exp);
-  $phong1->set_cd($yellow);
-
-  my $phong2 = new Material::Phong();
-  $phong2->set_ka($ka);
-  $phong2->set_kd($kd);
-  $phong2->set_ks($ks);
-  $phong2->set_exp($exp);
-  $phong2->set_cd($orange);
+  $phong1->set_cd($orange);
 
   my $matte1 = new Material::Matte();
   $matte1->set_ka($ka);
@@ -111,23 +106,23 @@ sub main {
   $matte1->set_cd($green);
 
   my $center1 = new Triple(0, 50, 0);
-  my $radius1 = 50;
-  my $sphere1 = new GeometricObject::Sphere($center1, $radius1);
-  $sphere1->material($phong1);
-
-  my $center2 = new Triple(-50, 50, -50);
-  my $radius2 = 23;
-  my $sphere2 = new GeometricObject::Sphere($center2, $radius2);
-  $sphere1->material($matte1);
-
   my $normal1 = new Triple(0, 1, 0);
   my $plane1 = new GeometricObject::Plane($center1, $normal1);
-  $plane1->material($phong2);
+  $plane1->material($phong1);
 
+  my $mesh = new Mesh();
+  $mesh->add_vertex(new Triple(0, 50, 0));
+  $mesh->add_vertex(new Triple(50, 50, 0));
+  $mesh->add_vertex(new Triple(0, 50, 50));
+  
+  my $triangle1 = new GeometricObject::FlatMeshTriangle(0, 1, 2, new Triple(1, 0, 0), $mesh);
+  $triangle1->material($matte1);
+  
+  
   $world->add_object($plane1);
-  $world->add_object($sphere1);
-  $world->add_object($sphere2);
-
+  $world->add_object($triangle1);
+  
+  
   my $start_time = time();
   print "start: ";
   my $image = $camera->render_scene($world);
