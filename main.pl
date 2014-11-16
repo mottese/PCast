@@ -7,8 +7,10 @@ use FindBin qw($Bin);
 use lib "$Bin/cameras";
 use lib "$Bin/lights";
 use lib "$Bin/materials";
-use lib "$Bin/materials/brdfs";
+use lib "$Bin/brdfs";
 use lib "$Bin/objects";
+use lib "$Bin/objects/primitives";
+use lib "$Bin/objects/triangles";
 use lib "$Bin/samplers";
 use lib "$Bin/utilities";
 use lib "$Bin/tracers";
@@ -44,7 +46,7 @@ my $console = select(STDOUT);
 $| = 1;
 select($console);
 
-spheres();
+main();
 
 sub main {
   my $hres = 400;
@@ -111,15 +113,16 @@ sub main {
   $plane1->material($phong1);
 
   my $mesh = new Mesh();
-  $mesh->add_vertex(new Triple(0, 50, 0));
-  $mesh->add_vertex(new Triple(50, 50, 0));
   $mesh->add_vertex(new Triple(0, 50, 50));
+  $mesh->add_vertex(new Triple(50, 50, 0));
+  $mesh->add_vertex(new Triple(50, 0, 50));
   
-  my $triangle1 = new GeometricObject::FlatMeshTriangle(0, 1, 2, new Triple(1, 0, 0), $mesh);
-  $triangle1->material($matte1);
+  my $triangle1 = new GeometricObject::FlatMeshTriangle(0, 1, 2, $mesh);
+  $triangle1->material($phong1);
+  $triangle1->calculate_normal();
   
   
-  $world->add_object($plane1);
+  #$world->add_object($plane1);
   $world->add_object($triangle1);
   
   

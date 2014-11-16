@@ -9,7 +9,7 @@ use parent 'Material';
 use FindBin qw($Bin);
 use lib "$Bin/../utilities";
 use lib "$Bin/../lights";
-use lib "$Bin/brdfs";
+use lib "$Bin/../brdfs";
 
 use Ambient;
 use Ray;

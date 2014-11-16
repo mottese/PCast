@@ -3,16 +3,16 @@
 use strict;
 use warnings;
 
-
-package GeometricObject::Box;
-
 use POSIX;
 
 use FindBin qw($Bin);
 use lib "$Bin/../utilities";
+use lib "$Bin/..";
 
 use Triple;
 
+package GeometricObject::Box;
+use parent 'GeometricObject';
 
 sub new {
   my $class = shift;

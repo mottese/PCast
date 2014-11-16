@@ -3,6 +3,12 @@
 use strict;
 use warnings;
 
+use FindBin qw($Bin);
+use lib "$Bin/..";
+use lib "$Bin/../../utilities";
+
+use Triple;
+
 package GeometricObject::FlatMeshTriangle;
 use parent 'GeometricObject';
 
@@ -14,10 +20,12 @@ sub new {
     _index0 => shift,
     _index1 => shift,
     _index2 => shift,
-    _normal => shift,
+    _normal => undef,
     _mesh => shift,
     _material => undef,
   }, $class;
+  
+  #$this->calculate_normal();
 
   return $this;
 }
@@ -28,6 +36,32 @@ sub material {
     $this->{_material} = shift;
   }
   return $this->{_material};
+}
+
+sub normal {
+  my $this = shift;
+  if(@_) {
+    $this->{_normal} = shift;
+  }
+  return $this->{_normal};
+}
+
+sub calculate_normal {
+  my $this = shift;
+  
+  my $p1 = $this->{_mesh}->vertex($this->{_index0});
+  my $p2 = $this->{_mesh}->vertex($this->{_index1});
+  my $p3 = $this->{_mesh}->vertex($this->{_index2});
+  
+  my $v = $p2 - $p1;
+  my $w = $p3 - $p1;
+  
+  my $nx = ($v->snd() * $w->trd()) - ($v->trd() * $w->snd());
+  my $ny = ($v->trd() * $w->fst()) - ($v->fst() * $w->trd());
+  my $nz = ($v->fst() * $w->snd()) - ($v->snd() * $w->fst());
+  
+  my $normal = new Triple($nx, $ny, $nz);
+  $this->{_normal} = $normal->normalize();
 }
 
 sub hit { # Note: $tmin must be a reference to a scalar

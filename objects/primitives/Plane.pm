@@ -3,9 +3,11 @@
 use strict;
 use warnings;
 
+use FindBin qw($Bin);
+use lib "$Bin/..";
+
 package GeometricObject::Plane;
 use parent 'GeometricObject';
-
 
 sub new {
   my $class = shift;

@@ -3,8 +3,6 @@
 use strict;
 use warnings;
 
-package GeometricObject::Rectangle;
-
 use POSIX;
 use List::Util qw[min max];
 
@@ -12,6 +10,10 @@ use FindBin qw($Bin);
 use lib "$Bin/../utilities";
 
 use Triple;
+
+package GeometricObject::Rectangle;
+use parent 'GeometricObject';
+
 
 
 sub new {

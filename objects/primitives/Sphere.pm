@@ -3,6 +3,10 @@
 use strict;
 use warnings;
 
+use FindBin qw($Bin);
+use lib "$Bin/..";
+use lib "$Bin/../utilities";
+
 use Triple;
 
 package GeometricObject::Sphere;
@@ -51,7 +55,7 @@ sub radius {
 
 
 sub hit { # Note: $tmin must be a reference to a scalar
-  my($this, $ray, $tmin, $shade_rec) = @_;
+  my ($this, $ray, $tmin, $shade_rec) = @_;
   my $temp = $ray->origin() - $this->{_center};
   my $a = $ray->direction();
   $a = $a * $a;
@@ -64,8 +68,8 @@ sub hit { # Note: $tmin must be a reference to a scalar
   }
   else {
     my $e = sqrt($disc);
-    my $denom = 2.0 * $a;
-    my $t = (-$b - $e) / $denom; # Smaller root
+    my $denom = 1 / (2.0 * $a);
+    my $t = (-$b - $e) * $denom; # Smaller root
 
     if ($t > $main::kEpsilon) {
       $$tmin = $t;
@@ -73,7 +77,7 @@ sub hit { # Note: $tmin must be a reference to a scalar
       $shade_rec->local_hit_point($ray->origin() + $t * $ray->direction());
       return 1;
     }
-    $t = (-$b + $e) / $denom; # Larger root
+    $t = (-$b + $e) * $denom; # Larger root
     if ($t > $main::kEpsilon) {
       $$tmin = $t;
       $shade_rec->normal(($temp + ($t * $ray->direction())) / $this->{_radius});
