@@ -119,7 +119,7 @@ sub main {
   #$mesh->add_vertex(new Triple(0, 50, 50));
   #$mesh->add_vertex(new Triple(50, 50, 0));
   #$mesh->add_vertex(new Triple(50, 0, 50));
-  $mesh->read_file("./obj_files/UtahTeapot.obj");
+  $mesh->read_file("./objects/obj_files/UtahTeapot.obj");
   #print ":done reading - ";
   #print ((time() - $start_time) . " seconds\n");
   
