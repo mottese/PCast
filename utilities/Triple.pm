@@ -122,7 +122,12 @@ sub normalize {
   my $this = shift;
   
   #one over length
-  my $ool = 1 / sqrt(($this->{_fst} * $this->{_fst})+($this->{_snd} * $this->{_snd})+($this->{_trd} * $this->{_trd}));
+  my $length = sqrt(($this->{_fst} * $this->{_fst})+($this->{_snd} * $this->{_snd})+($this->{_trd} * $this->{_trd}));
+  if ($length == 0) {
+    return;
+  }
+  
+  my $ool = 1 / $length;
   
   return new Triple($this->{_fst} * $ool, $this->{_snd} * $ool, $this->{_trd} * $ool);
 }

@@ -40,6 +40,7 @@ use Emissive;
 use Area;
 use Mesh;
 use FlatMeshTriangle;
+use MeshObject;
 
 # print buffers to insure messages go to screen quickly
 my $console = select(STDOUT);
@@ -49,8 +50,8 @@ select($console);
 main();
 
 sub main {
-  my $hres = 400;
-  my $vres = 400;
+  my $hres = 200;
+  my $vres = 200;
   my $pixel_size = 1;
   my $num_samples = 1;
   my $sampler = new Sampler::Jittered($num_samples);
@@ -61,7 +62,7 @@ sub main {
   my $roll_angle = $main::pi * .5; #in radians
   my $zoom = 2;
   my $exposure_time = 1;
-  my $file_name = "test";
+  my $file_name = "teapot";
 
 
   my $camera = new Camera::PinholeCamera($hres, $vres, $pixel_size, $sampler, $eye, $distance_to_viewplane, $up, $look_at, $roll_angle, $zoom, $exposure_time);
@@ -112,25 +113,33 @@ sub main {
   my $plane1 = new GeometricObject::Plane($center1, $normal1);
   $plane1->material($phong1);
 
+  #my $start_time = time();
+  #print "start reading: ";
   my $mesh = new Mesh();
-  $mesh->add_vertex(new Triple(0, 50, 50));
-  $mesh->add_vertex(new Triple(50, 50, 0));
-  $mesh->add_vertex(new Triple(50, 0, 50));
+  #$mesh->add_vertex(new Triple(0, 50, 50));
+  #$mesh->add_vertex(new Triple(50, 50, 0));
+  #$mesh->add_vertex(new Triple(50, 0, 50));
+  $mesh->read_file("./obj_files/UtahTeapot.obj");
+  #print ":done reading - ";
+  #print ((time() - $start_time) . " seconds\n");
   
-  my $triangle1 = new GeometricObject::FlatMeshTriangle(0, 1, 2, $mesh);
-  $triangle1->material($phong1);
-  $triangle1->calculate_normal();
+  my $mesh_object1 = new GeometricObject::MeshObject($mesh);
+  $mesh_object1->material($phong1);
+  
+  #my $triangle1 = new GeometricObject::FlatMeshTriangle(0, 1, 2, $mesh);
+  #$triangle1->material($phong1);
+  #$triangle1->calculate_normal();
   
   
   #$world->add_object($plane1);
-  $world->add_object($triangle1);
+  $world->add_object($mesh_object1);
   
   
   my $start_time = time();
   print "start: ";
   my $image = $camera->render_scene($world);
-  print ":done\n";
-  print ((time() - $start_time) . " seconds");
+  print ":done - ";
+  print ((time() - $start_time) . " seconds\n");
 
   open (my $fh, ">" . $file_name . ".bmp");
   $image->print($fh);

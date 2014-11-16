@@ -94,7 +94,11 @@ sub hit { # Note: $tmin must be a reference to a scalar
   my $r = $e * $l - $h * $i;
   my $s = $e * $j - $f * $i;
   
-  my $inv_denom = 1.0 / ($a * $m + $b * $q + $c * $s);
+  my $denom = $a * $m + $b * $q + $c * $s;
+  if ($denom == 0) {
+    return 0;
+  }
+  my $inv_denom = 1.0 / $denom;
   
   my $el = $d * $m - $b * $n - $c * $p;
   my $beta = $el * $inv_denom;
