@@ -18,6 +18,7 @@ The set of features included right now are:
   - Sphere
   - Plane
   - Box
+  - Triangle Meshes
 - Lights and Shadows
   - Ambient lighting
   - Directional lighting
