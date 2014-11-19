@@ -14,14 +14,14 @@ package Mesh;
 
 sub new {
   my $class = shift;
-  
+
   my @vertices = ();
   my @indices = ();
   my @normals = ();
   my @faces = ();
   my @u = ();
   my @v = ();
-  
+
   my $this = bless {
     _vertices => \@vertices, #vertices
     _indices => \@indices, #vertex indices
@@ -34,7 +34,7 @@ sub new {
     _num_normals => 0, #number of vertex normals
     _bounding_box => undef,
   }, $class;
-  
+
   return $this;
 }
 
@@ -89,21 +89,21 @@ sub read_file {
   my $filename = shift;
   open (my $fh, "<" . $filename)
     or die "Could not open file '$filename' $!"; #pass in the file path/name
-  
+
   my @data;
-  
-  while (my $line = <$fh>) { 
+
+  while (my $line = <$fh>) {
     if ($line =~ /^\s*$/) {
       next;
     }
-  
+
     chomp($line);
     my $find = "  ";
     my $replace = " ";
     $find = quotemeta $find; # escape regex metachars if present
     $line =~ s/$find/$replace/g; #replace double spaces with single spaces
     @data = split(' ', $line);
-    
+
     if ($data[0] eq "v") {
       $this->add_vertex(new Triple ($data[1], $data[2], $data[3]));
     }
@@ -115,34 +115,36 @@ sub read_file {
       $this->add_face(new GeometricObject::FlatMeshTriangle($data[1] - 1, $data[2] - 1, $data[3] - 1, $this));
     }
     elsif ($data[0] eq "g") {
-    
+
     }
     else {
-    
+
     }
   }
- 
+
+  print $this->{_num_faces} . "\n";
+
   close $fh;
-  
+
   $this->calculate_bounding_box();
 }
 
 sub calculate_bounding_box {
   my $this = shift;
-  
+
   my $min = ${$this->{_vertices}}[0];
   my $max = ${$this->{_vertices}}[0];
-  
+
   foreach my $p (@{$this->{_vertices}}) {
     if    ($p->fst() < $min->fst()) { $min->fst($p->fst()); }
     elsif ($p->snd() < $min->snd()) { $min->snd($p->snd()); }
     elsif ($p->trd() < $min->trd()) { $min->trd($p->trd()); }
-    
+
     if    ($p->fst() > $max->fst()) { $max->fst($p->fst()); }
     elsif ($p->snd() > $max->snd()) { $max->snd($p->snd()); }
     elsif ($p->trd() > $max->trd()) { $max->trd($p->trd()); }
   }
-  
+
   $this->{_bounding_box} = new GeometricObject::Box($min, $max);
 }
 

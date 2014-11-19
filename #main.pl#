@@ -50,11 +50,11 @@ select($console);
 main();
 
 sub main {
-  my $hres = 180;
-  my $vres = 180;
+  my $hres = 200;
+  my $vres = 200;
   my $pixel_size = 1;
   my $num_samples = 1;
-  my $sampler = new Sampler::Jittered($num_samples);
+  m
   my $eye = new Triple(0, 100, -100);
   my $look_at = new Triple(0, 0, 0);
   my $distance_to_viewplane = 50;
@@ -122,19 +122,19 @@ sub main {
   $mesh->read_file("./objects/obj_files/UtahTeapot.obj");
   #print ":done reading - ";
   #print ((time() - $start_time) . " seconds\n");
-
+  
   my $mesh_object1 = new GeometricObject::MeshObject($mesh);
   $mesh_object1->material($phong1);
-
+  
   #my $triangle1 = new GeometricObject::FlatMeshTriangle(0, 1, 2, $mesh);
   #$triangle1->material($phong1);
   #$triangle1->calculate_normal();
-
-
+  
+  
   #$world->add_object($plane1);
   $world->add_object($mesh_object1);
-
-
+  
+  
   my $start_time = time();
   print "start: ";
   my $image = $camera->render_scene($world);
