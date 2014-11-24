@@ -13,22 +13,31 @@ package World;
 
 sub new {
   my $class = shift;
-  
+
   my @objects = ();
   my @lights = ();
-  
+
   my $this = bless {
     _background_color => shift,
-	  _objects => \@objects,
+    _objects => \@objects,
     _ambient_light => shift,
     _lights => \@lights,
     _num_objects => 0,
     _num_lights => 0,
     _tracer => undef,
     _render_thread => undef,
+    _camera => shift,
   }, $class;
-  
+
   return $this;
+}
+
+sub camera {
+  my $this = shift;
+  if (@_) {
+    $this->{_camera} = shift;
+  }
+  return $this->{_camera};
 }
 
 sub background_color {
@@ -80,7 +89,7 @@ sub add_light {
   my $light = shift;
   my $this_lights = $this->{_lights};
   my $num_lights = $this->{_num_lights};
-  
+
   ${$this_lights}[$num_lights] = $light;
   $this->{_num_lights} = $num_lights + 1;
 }
@@ -88,10 +97,10 @@ sub add_light {
 
 sub add_object {
   my $this = shift;
-  my $object = shift;  
+  my $object = shift;
   my $this_objects = $this->{_objects};
   my $num_objects = $this->{_num_objects};
-  
+
   ${$this_objects}[$num_objects] = $object;
   $this->{_num_objects} = $num_objects + 1;
 }
@@ -105,7 +114,7 @@ sub hit_objects {
   my $tmin = $main::kHugeValue;
   my $t = $main::kHugeValue;
   my $num_objs = $this->{_num_objects};
-  
+
   for (my $j = 0; $j < $num_objs; $j++) {
     if (${$this->{_objects}}[$j]->hit($ray, \$t, $shade_rec) and ($t < $tmin)) {
       $shade_rec->hit(1);
@@ -121,7 +130,7 @@ sub hit_objects {
     $shade_rec->normal($normal);
     $shade_rec->local_hit_point($local_hit_point);
   }
-  
+
   return $shade_rec;
 }
 
