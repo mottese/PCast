@@ -53,17 +53,17 @@ select($console);
 reflective();
 
 sub reflective {
-  my $hres = 400;
-  my $vres = 400;
+  my $hres = 800;
+  my $vres = 800;
   my $pixel_size = 1;
-  my $num_samples = 1;
+  my $num_samples = 4;
   my $sampler = new Sampler::Jittered($num_samples);
   my $eye = new Triple(0, 100, -100);
   my $look_at = new Triple(0, 0, 0);
   my $distance_to_viewplane = 50;
   my $up = new Triple(0, 1, 0);
   my $roll_angle = $main::pi * .5; #in radians
-  my $zoom = 2;
+  my $zoom = 8;
   my $exposure_time = 1;
   my $file_name = "reflective";
 
