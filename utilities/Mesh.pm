@@ -67,6 +67,15 @@ sub vertex {
   return ${$this->{_vertices}}[shift];
 }
 
+#Only used in the MeshObject class when you're doing transforms. Don't use this
+sub vertices {
+  my $this = shift;
+  if (@_) {
+    $this->{_vertices} = shift;
+  }
+  return $this->{_vertices};
+}
+
 sub normal {
   my $this = shift;
   return ${$this->{_normals}}[shift];
@@ -111,7 +120,7 @@ sub read_file {
       $this->add_normal(new Triple ($data[1], $data[2], $data[3]));
     }
     elsif ($data[0] eq "f") {
-    # -1 because the indices in the file are 1-based and our arrays are 0-based
+    # - 1 because the indices in the file are 1-based and our arrays are 0-based
       $this->add_face(new GeometricObject::FlatMeshTriangle($data[1] - 1, $data[2] - 1, $data[3] - 1, $this));
     }
     elsif ($data[0] eq "g") {
@@ -122,7 +131,7 @@ sub read_file {
     }
   }
 
-  print $this->{_num_faces} . "\n";
+  #print $this->{_num_faces} . "\n";
 
   close $fh;
 

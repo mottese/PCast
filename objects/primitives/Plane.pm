@@ -51,6 +51,8 @@ sub shadow_hit {
   #$ray->direction()->println();
   #$this->{_normal}->println();
   
+  if ($ray->direction() * $this->{_normal} == 0) { return 0; }
+  
   my $t = (($this->{_point} - $ray->origin()) * $this->{_normal}) / ($ray->direction() * $this->{_normal});
   
   if ($t > $main::kEpsilon) {

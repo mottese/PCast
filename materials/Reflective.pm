@@ -32,7 +32,10 @@ sub shade {
   my $fr = $this->{_reflective_brdf}->sample_f($shade_rec, $wo, \$wi);
   my $reflected_ray = new Ray($shade_rec->hit_point(), $wi);
 
-  $L += $fr * $shade_rec->world()->tracer()->trace_ray($reflected_ray, $shade_rec->depth() + 1) * ($shade_rec->normal() * $wi);
+  my $temp1 = $fr * $shade_rec->world()->tracer()->trace_ray($reflected_ray, $shade_rec->depth() + 1);
+  my $temp2 = $shade_rec->normal() * $wi;
+  
+  $L += new Triple($temp1 * $temp2, $temp1 * $temp2, $temp1 * $temp2);
 
   return $L;
 }

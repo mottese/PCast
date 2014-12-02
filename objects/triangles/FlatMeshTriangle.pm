@@ -62,7 +62,7 @@ sub calculate_normal {
   #my $ny = ($v->trd() * $w->fst()) - ($v->fst() * $w->trd());
   #my $nz = ($v->fst() * $w->snd()) - ($v->snd() * $w->fst());
 
-  #my $normal = new Triple($nx, $ny, $nz);
+  #my $normal = new Triple(-1 * $nx, -1 * $ny, -1 * $nz);
   #$this->{_normal} = $normal->normalize();
 }
 

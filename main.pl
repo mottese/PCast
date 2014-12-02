@@ -43,6 +43,7 @@ use Area;
 use Mesh;
 use FlatMeshTriangle;
 use MeshObject;
+use Matrix;
 
 # print buffers to insure messages go to screen quickly
 my $console = select(STDOUT);
@@ -91,11 +92,24 @@ sub reflective {
   my $dark_yellow = new Triple(0.61, 0.61, 0);  #dark yellow
   my $light_purple = new Triple(0.65, 0.3, 1);  #light purple
   my $dark_purple = new Triple(0.5, 0, 1);  #dark purple
+  
+  #phong materials' reflection coefficients
+  my $ka = 0.25;
+  my $kd = 0.75;
+  my $ks = 0.1;
+  my $exp = 50;
 
   my $matte1 = new Material::Matte();
-  $matte1->set_ka(0.25);
-  $matte1->set_kd(0.75);
+  $matte1->set_ka($ka);
+  $matte1->set_kd($kd);
   $matte1->set_cd($green);
+  
+  my $phong1 = new Material::Phong();
+  $phong1->set_ka($ka);
+  $phong1->set_kd($kd);
+  $phong1->set_ks($ks);
+  $phong1->set_exp($exp);
+  $phong1->set_cd($orange);
 
   my $reflective1 = new Material::Reflective();
   $reflective1->set_ka(0.25);
@@ -114,9 +128,13 @@ sub reflective {
   my $center2 = new Triple(-50, 50, -50);
   my $radius2 = 23;
   my $sphere2 = new GeometricObject::Sphere($center2, $radius2);
-  $sphere2->material($matte1);
+  $sphere2->material($reflective1);
 
+  my $normal1 = new Triple(0, 1, 0);
+  my $plane1 = new GeometricObject::Plane($center1, $normal1);
+  $plane1->material($phong1);
 
+  $world->add_object($plane1);
   $world->add_object($sphere1);
   $world->add_object($sphere2);
 
@@ -132,9 +150,9 @@ sub reflective {
   close $fh;
 }
 
-sub main {
-  my $hres = 180;
-  my $vres = 180;
+sub mesh {
+  my $hres = 400;
+  my $vres = 400;
   my $pixel_size = 1;
   my $num_samples = 1;
   my $sampler = new Sampler::Jittered($num_samples);
@@ -143,9 +161,9 @@ sub main {
   my $distance_to_viewplane = 50;
   my $up = new Triple(0, 1, 0);
   my $roll_angle = $main::pi * .5; #in radians
-  my $zoom = 2;
+  my $zoom = 400;
   my $exposure_time = 1;
-  my $file_name = "teapot";
+  my $file_name = "box";
 
 
   my $camera = new Camera::PinholeCamera($hres, $vres, $pixel_size, $sampler, $eye, $distance_to_viewplane, $up, $look_at, $roll_angle, $zoom, $exposure_time);
@@ -202,12 +220,14 @@ sub main {
   #$mesh->add_vertex(new Triple(0, 50, 50));
   #$mesh->add_vertex(new Triple(50, 50, 0));
   #$mesh->add_vertex(new Triple(50, 0, 50));
-  $mesh->read_file("./objects/obj_files/UtahTeapot.obj");
+  $mesh->read_file("./objects/obj_files/Cube.obj");
   #print ":done reading - ";
   #print ((time() - $start_time) . " seconds\n");
 
   my $mesh_object1 = new GeometricObject::MeshObject($mesh);
   $mesh_object1->material($phong1);
+  
+  #$mesh_object1->transform(Matrix->scaling(50));
 
   #my $triangle1 = new GeometricObject::FlatMeshTriangle(0, 1, 2, $mesh);
   #$triangle1->material($phong1);

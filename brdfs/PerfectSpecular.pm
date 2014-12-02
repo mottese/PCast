@@ -36,9 +36,16 @@ sub sample_f {
   my ($this, $shade_rec, $wo, $wi) = @_;
 
   my $ndotwo = $shade_rec->normal() * $wo;
-  $$wi = (-1 * $wo) + (2 * $shade_rec->normal() * $ndotwo);
+  
+  my $temp = (-1 * $wo) + (2 * $shade_rec->normal() * $ndotwo);
+  
+  
+  $$wi = $temp;
+  
+  my $temp1 = $this->{_kr} * $this->{_cr};
+  my $temp2 = $shade_rec->normal() * $temp;
 
-  return ($this->{_kr} * $this->{_cr}) / ($shade_rec->normal() * $wi);
+  return $temp1 / $temp2;
 }
 
 

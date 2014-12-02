@@ -31,6 +31,17 @@ sub material {
   return $this->{_material};
 }
 
+sub transform {
+             #transformation matrix
+  my ($this, $t_matrix) = @_;
+  
+  my $vertices_ref = $this->{_mesh}->vertices();
+  
+  my @transformed_vertices = map { $t_matrix->transform($_) } @$vertices_ref;
+  
+  $this->{_mesh}->vertices(\@transformed_vertices);
+}
+
 sub hit {
   my ($this, $ray, $tmin, $shade_rec) = @_;
   
