@@ -118,7 +118,7 @@ sub reflective {
   $reflective1->set_ks(0.15);
   $reflective1->set_exp(100);
   $reflective1->set_kr(0.75);
-  $reflective1->set_cr(new Triple(1, 1, 1)); #white
+  $reflective1->set_cr(new Triple(0.5, 0.5, 0.5)); #white
 
   my $center1 = new Triple(0, 50, 0);
   my $radius1 = 50;
