@@ -87,6 +87,7 @@ sub normal {
   my $this = shift;
   if(@_) {
     $this->{_normal} = shift;
+    $this->{_normal} = $this->{_normal}->normalize();
   }
   return $this->{_normal};
 }

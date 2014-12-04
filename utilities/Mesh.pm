@@ -112,6 +112,8 @@ sub read_file {
     $find = quotemeta $find; # escape regex metachars if present
     $line =~ s/$find/$replace/g; #replace double spaces with single spaces
     @data = split(' ', $line);
+    
+   
 
     if ($data[0] eq "v") {
       $this->add_vertex(new Triple ($data[1], $data[2], $data[3]));

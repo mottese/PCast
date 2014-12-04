@@ -25,7 +25,7 @@ sub new {
 
 sub shade {
   my ($this, $shade_rec) = @_;
-  my $L = $this->{_phong}->shade($shade_rec) * (new Triple(1,1,1) / ($shade_rec->depth()+1));
+  my $L = $this->{_phong}->shade($shade_rec);
 
   my $wo = -1 * $shade_rec->ray()->direction();
   my $wi;
@@ -33,10 +33,10 @@ sub shade {
   my $fr = $this->{_reflective_brdf}->sample_f($shade_rec, $wo, \$wi);
   my $reflected_ray = new Ray($shade_rec->hit_point(), $wi);
 
-  my $temp1 = $fr * $shade_rec->world()->tracer()->trace_ray($reflected_ray, $shade_rec->depth() + 1);
+  my $temp1 = $fr->element_wise_multiplication($shade_rec->world()->tracer()->trace_ray($reflected_ray, $shade_rec->depth() + 1));
   my $temp2 = $shade_rec->normal() * $wi;
 
-  $L += ($temp1 * $temp2);
+  $L += $temp1 * $temp2;
 
   return $L;
 }

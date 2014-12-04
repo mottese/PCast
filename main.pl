@@ -53,17 +53,17 @@ select($console);
 reflective();
 
 sub reflective {
-  my $hres = 400;
-  my $vres = 400;
+  my $hres = 1000;
+  my $vres = 1000;
   my $pixel_size = 1;
-  my $num_samples = 1;
+  my $num_samples = 9;
   my $sampler = new Sampler::Jittered($num_samples);
   my $eye = new Triple(0, 100, -100);
   my $look_at = new Triple(0, 0, 0);
   my $distance_to_viewplane = 50;
   my $up = new Triple(0, 1, 0);
   my $roll_angle = $main::pi * .5; #in radians
-  my $zoom = 3;
+  my $zoom = 7;
   my $exposure_time = 1;
   my $file_name = "reflective";
 
@@ -102,7 +102,7 @@ sub reflective {
   my $matte1 = new Material::Matte();
   $matte1->set_ka($ka);
   $matte1->set_kd($kd);
-  $matte1->set_cd($green);
+  $matte1->set_cd($orange);
   
   my $phong1 = new Material::Phong();
   $phong1->set_ka($ka);
@@ -114,10 +114,10 @@ sub reflective {
   my $reflective1 = new Material::Reflective();
   $reflective1->set_ka(0.25);
   $reflective1->set_kd(0.5);
-  $reflective1->set_cd(new Triple(0.9, 0.9, 0.9));
+  $reflective1->set_cd($light_green);
   $reflective1->set_ks(0.15);
   $reflective1->set_exp(100);
-  $reflective1->set_kr(0.75);
+  $reflective1->set_kr(0.5);
   $reflective1->set_cr(new Triple(1, 1, 1)); #white
 
   my $center1 = new Triple(0, 50, 0);
@@ -217,17 +217,22 @@ sub mesh {
   #my $start_time = time();
   #print "start reading: ";
   my $mesh = new Mesh();
+  my $mesh2 = new Mesh();
   #$mesh->add_vertex(new Triple(0, 50, 50));
   #$mesh->add_vertex(new Triple(50, 50, 0));
   #$mesh->add_vertex(new Triple(50, 0, 50));
   $mesh->read_file("./objects/obj_files/Cube.obj");
+  $mesh2->read_file("./objects/obj_files/Cube.obj");
   #print ":done reading - ";
   #print ((time() - $start_time) . " seconds\n");
 
   my $mesh_object1 = new GeometricObject::MeshObject($mesh);
   $mesh_object1->material($phong1);
   
-  #$mesh_object1->transform(Matrix->scaling(50));
+  my $mesh_object2 = new GeometricObject::MeshObject($mesh2);
+  $mesh_object2->material($matte1);
+  
+  $mesh_object2->transform(Matrix->translation(new Triple(1, 0, 1)));
 
   #my $triangle1 = new GeometricObject::FlatMeshTriangle(0, 1, 2, $mesh);
   #$triangle1->material($phong1);
@@ -236,6 +241,7 @@ sub mesh {
 
   #$world->add_object($plane1);
   $world->add_object($mesh_object1);
+  #$world->add_object($mesh_object2);
 
 
   my $start_time = time();

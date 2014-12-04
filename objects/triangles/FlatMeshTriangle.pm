@@ -68,7 +68,7 @@ sub calculate_normal {
 
 sub hit { # Note: $tmin must be a reference to a scalar
   my ($this, $ray, $tmin, $shade_rec) = @_;
-
+  
   my $v0 = $this->{_mesh}->vertex($this->{_index0});
   my $v1 = $this->{_mesh}->vertex($this->{_index1});
   my $v2 = $this->{_mesh}->vertex($this->{_index2});
@@ -95,9 +95,13 @@ sub hit { # Note: $tmin must be a reference to a scalar
   my $q = $g * $i - $e * $k;
   my $r = $e * $l - $h * $i;
   my $s = $e * $j - $f * $i;
+  
+  
 
   my $denom = $a * $m + $b * $q + $c * $s;
   if ($denom == 0) {
+  
+    print "$a, $b, $c, $m, $q, $s\n\n";
     $denom = 1;
     #return 0;
   }

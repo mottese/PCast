@@ -58,34 +58,73 @@ sub combine {
 
 sub x_rotation {
   my ($class, $angle) = @_;
-  return new Matrix((1, 0, 0, 0), (0, cos($angle), -1 * sin($angle), 0), (0, sin($angle), cos($angle), 0), (0, 0, 0, 1));
+
+  my @row1 = (1, 0, 0, 0);
+  my @row2 = (0, cos($angle), -1 * sin($angle), 0);
+  my @row3 = (0, sin($angle), cos($angle), 0);
+  my @row4 = (0, 0, 0, 1);
+  
+  return new Matrix(\@row1, \@row2, \@row3, \@row4);
 }
 
 sub y_rotation {
   my ($class, $angle) = @_;
-  return new Matrix((cos($angle), 0, sin($angle), 0), (0, 1, 0, 0), (-1 * sin($angle), 0, cos($angle), 0), (0, 0, 0, 1));
+  
+  my @row1 = (cos($angle), 0, sin($angle), 0);
+  my @row2 = (0, 1, 0, 0);
+  my @row3 = (-1 * sin($angle), 0, cos($angle), 0);
+  my @row4 = (0, 0, 0, 1);
+  
+  return new Matrix(\@row1, \@row2, \@row3, \@row4);  
 }
 
 sub z_rotation {
   my ($class, $angle) = @_;
-  return new Matrix((cos($angle), -1 * sin($angle), 0, 0), (sin($angle), cos($angle), 0, 0), (0, 0, 1, 0), (0, 0, 0, 1));
+  
+  my @row1 = (cos($angle), -1 * sin($angle), 0, 0);
+  my @row2 = (sin($angle), cos($angle), 0, 0);
+  my @row3 = (0, 0, 1, 0);
+  my @row4 = (0, 0, 0, 1);
+  
+  return new Matrix(\@row1, \@row2, \@row3, \@row4);  
 }
 
 sub x_reflection {
-  return new Matrix((-1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1));
+  my @row1 = (-1, 0, 0, 0);
+  my @row2 = (0, 1, 0, 0);
+  my @row3 = (0, 0, 1, 0);
+  my @row4 = (0, 0, 0, 1);
+  
+  return new Matrix(\@row1, \@row2, \@row3, \@row4);
 }
 
 sub y_reflection {
-  return new Matrix((1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1));
+  my @row1 = (1, 0, 0, 0);
+  my @row2 = (0, -1, 0, 0);
+  my @row3 = (0, 0, 1, 0);
+  my @row4 = (0, 0, 0, 1);
+  
+  return new Matrix(\@row1, \@row2, \@row3, \@row4);
 }
 
 sub z_reflection {
-  return new Matrix((1, 0, 0, 0), (0, 1, 0, 0), (0, 0, -1, 0), (0, 0, 0, 1));
+  my @row1 = (1, 0, 0, 0);
+  my @row2 = (0, 1, 0, 0);
+  my @row3 = (0, 0, -1, 0);
+  my @row4 = (0, 0, 0, 1);
+  
+  return new Matrix(\@row1, \@row2, \@row3, \@row4);
 }
 
 sub translation {
   my ($class, $t) = @_;
-  return new Matrix((1, 0, 0, $t->fst()), (0, 1, 0, $t->snd()), (0, 0, 1, $t->trd()), (0, 0, 0, 1));
+  
+  my @row1 = (1, 0, 0, $t->fst());
+  my @row2 = (0, 1, 0, $t->snd());
+  my @row3 = (0, 0, 1, $t->trd());
+  my @row4 = (0, 0, 0, 1);
+  
+  return new Matrix(\@row1, \@row2, \@row3, \@row4);
 }
 
 sub scaling {

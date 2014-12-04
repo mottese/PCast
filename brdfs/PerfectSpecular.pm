@@ -39,17 +39,9 @@ sub sample_f {
   
   my $temp = (-1 * $wo) + (2 * $shade_rec->normal() * $ndotwo);
   
-  
   $$wi = $temp;
-  
-  my $temp1 = $this->{_kr} * $this->{_cr};
-  my $temp2 = $shade_rec->normal() * $temp;
 
-  #$temp->println();
-  #$shade_rec->normal()->println();
-  #print "$temp2\n\n";
-
-  return $temp1 / $temp2;
+  return $this->{_kr} * $this->{_cr} / ($shade_rec->normal() * $temp);
 }
 
 
