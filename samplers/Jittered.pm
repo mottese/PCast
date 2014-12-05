@@ -11,12 +11,14 @@ use POSIX;
 sub new {
 
   my @samples = ();
+  my @disk_samples = ();
 
   my $class = shift;
   my $this = bless {
     _num_samples => shift,
     _num_sets => 1, 
     _samples => \@samples,
+    _disk_samples => \@disk_samples,
     _samples_size => 0,
     _shuffled_indices => undef,
     _count => 0,
