@@ -28,7 +28,7 @@ The set of features included right now are:
   - Ambient lighting
   - Directional lighting
   - Point lighting
-  - Area Lighting (in progress)
+  - Area lighting (in progress)
 - BRDFs
   - Lambertian
   - Glossy Specular
