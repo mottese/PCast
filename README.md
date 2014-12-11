@@ -9,6 +9,7 @@ The set of features included right now are:
 - Anti-aliasing with different sampling methods
   - Jittered sampling
   - Multi-jittered sampling
+  - Hammersley sampling (in progress)
 - Configurable Camera
   - Position
   - Rotation
@@ -22,10 +23,12 @@ The set of features included right now are:
   - Plane
   - Box
   - Triangle Meshes
+  - Smooth Triangle Meshes (in progress)
 - Lights and Shadows
   - Ambient lighting
   - Directional lighting
   - Point lighting
+  - Area Lighting (in progress)
 - BRDFs
   - Lambertian
   - Glossy Specular
@@ -34,3 +37,5 @@ The set of features included right now are:
   - Matte
   - Phong
   - Reflective
+  - Light-emitting (in progress)
+  - Trasnparent (in progress)
